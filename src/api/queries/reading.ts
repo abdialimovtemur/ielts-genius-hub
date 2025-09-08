@@ -6,7 +6,7 @@ import { ReadingTest, ApiError } from "@/types/reading";
 const fetchReadingTest = async (): Promise<ReadingTest> => {
   try {
     const { data } = await axiosInstance.get("/level-checker/reading");
-    return data;
+    return data; 
   } catch (error: any) {
     const apiError: ApiError = {
       message: error.response?.data?.message || "Failed to fetch reading test",

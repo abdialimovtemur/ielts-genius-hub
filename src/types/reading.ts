@@ -2,7 +2,7 @@
 export interface ReadingQuestion {
   question: string;
   questionType: 'multiple_choice' | 'true_false_not_given' | 'short_answer' | 'matching';
-  options: string[];
+  options?: string[]; // Optional field for questions that don't need options
 }
 
 export interface ReadingTest {

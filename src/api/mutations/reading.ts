@@ -5,7 +5,7 @@ import { ReadingSubmission, ReadingEvaluation, ApiError } from "@/types/reading"
 
 const submitReadingTest = async (submission: ReadingSubmission): Promise<ReadingEvaluation> => {
   try {
-    const { data } = await axiosInstance.post("/api/level-checker/reading", submission);
+    const { data } = await axiosInstance.post("/level-checker/reading", submission);
     return data;
   } catch (error: any) {
     const apiError: ApiError = {

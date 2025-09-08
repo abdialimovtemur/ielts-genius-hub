@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext"
 
 export default function RouteGuard({ children }: { children: React.ReactNode }) {
   const { data: user, isLoading, error } = useProfileQuery()
-  const { isLoggedIn, checkAuth } = useAuth()
+  const { checkAuth } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
 

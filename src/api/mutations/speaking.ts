@@ -13,7 +13,7 @@ const submitSpeakingTest = async (submission: SpeakingSubmission): Promise<Speak
       formData.append(`audioFiles`, file);
     });
 
-    const { data } = await axiosInstance.post("/api/level-checker/speaking", formData, {
+    const { data } = await axiosInstance.post("/level-checker/speaking", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

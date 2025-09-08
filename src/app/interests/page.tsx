@@ -67,7 +67,7 @@ export default function FirstTimeInterestsPage() {
             Welcome! Choose Your Interests
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Select 1-3 topics you're passionate about to personalize your experience
+            Select 1-3 topics you are passionate about to personalize your experience
           </p>
           <div className="mt-4 text-sm text-muted-foreground">
             Select {selectedInterests.length}/3 interests

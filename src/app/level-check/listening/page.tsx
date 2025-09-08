@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useListeningTestQuery } from "@/api/queries/listening";
-import { ListeningTest, ListeningSubmission, ListeningEvaluation, ApiError } from "@/types/listening";
+import { ListeningSubmission, ListeningEvaluation, ApiError } from "@/types/listening";
 import { useSubmitListeningTestMutation } from "@/api/mutations/listening";
 import ErrorDisplay from "@/components/level-check/reading/ErrorDisplay";
 import LoadingSpinner from "@/components/level-check/reading/LoadingSpinner";

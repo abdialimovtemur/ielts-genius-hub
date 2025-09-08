@@ -37,22 +37,37 @@ export default function QuestionsList({
               {index + 1}. {question.question}
             </div>
             
-            <div className="space-y-2">
-              {question.options.map((option, optionIndex) => (
-                <label key={optionIndex} className="flex items-start space-x-2 cursor-pointer">
-                  <input
-                    type={question.questionType === 'multiple_choice' ? 'radio' : 'checkbox'}
-                    name={`question-${index}`}
-                    value={option}
-                    checked={userAnswers[index] === option}
-                    onChange={() => onAnswerChange(index, option)}
-                    className="mt-1"
-                    disabled={isSubmitting || !hasPlayedAudio}
-                  />
-                  <span className={!hasPlayedAudio ? 'text-gray-400' : ''}>{option}</span>
-                </label>
-              ))}
-            </div>
+            {/* Options mavjudligini tekshirish */}
+            {question.options && question.options.length > 0 ? (
+              <div className="space-y-2">
+                {question.options.map((option, optionIndex) => (
+                  <label key={optionIndex} className="flex items-start space-x-2 cursor-pointer">
+                    <input
+                      type={question.questionType === 'multiple_choice' ? 'radio' : 'checkbox'}
+                      name={`question-${index}`}
+                      value={option}
+                      checked={userAnswers[index] === option}
+                      onChange={() => onAnswerChange(index, option)}
+                      className="mt-1"
+                      disabled={isSubmitting || !hasPlayedAudio}
+                    />
+                    <span className={!hasPlayedAudio ? 'text-gray-400' : ''}>{option}</span>
+                  </label>
+                ))}
+              </div>
+            ) : (
+              // Agar options bo'lmasa, text input ko'rsatish
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={userAnswers[index] || ''}
+                  onChange={(e) => onAnswerChange(index, e.target.value)}
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Type your answer here..."
+                  disabled={isSubmitting || !hasPlayedAudio}
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>

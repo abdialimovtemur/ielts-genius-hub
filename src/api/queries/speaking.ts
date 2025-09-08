@@ -5,7 +5,7 @@ import { SpeakingTest, ApiError } from "@/types/speaking";
 
 const fetchSpeakingTest = async (): Promise<SpeakingTest> => {
   try {
-    const { data } = await axiosInstance.get("/api/level-checker/speaking");
+    const { data } = await axiosInstance.get("/level-checker/speaking");
     return data;
   } catch (error: any) {
     const apiError: ApiError = {

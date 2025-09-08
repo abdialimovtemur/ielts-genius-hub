@@ -2,7 +2,7 @@
 export interface ListeningQuestion {
   question: string;
   questionType: 'multiple_choice' | 'true_false_not_given' | 'short_answer' | 'matching';
-  options: string[];
+  options?: string[];
 }
 
 export interface ListeningTest {

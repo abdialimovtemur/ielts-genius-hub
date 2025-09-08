@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext"
 const Header = () => {
   const { toggleSidebar, open } = useSidebar()
   const { isLoggedIn, checkAuth } = useAuth()
-  const { data: profile, isLoading } = useProfileQuery()
+  const { data: profile } = useProfileQuery()
 
   // Profile o'zgarganda auth holatini yangilash
   useEffect(() => {

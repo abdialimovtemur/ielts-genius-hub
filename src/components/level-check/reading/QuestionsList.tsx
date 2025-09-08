@@ -16,6 +16,17 @@ export default function QuestionsList({
   isSubmitting,
   onSubmit
 }: QuestionsListProps) {
+  // Add safety checks for undefined data
+  if (!testData?.questions) {
+    return (
+      <div className="bg-card rounded-lg shadow-lg p-6 mt-6">
+        <div className="text-center text-muted-foreground">
+          No questions available
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-card rounded-lg shadow-lg p-6 mt-6">
       <div>
@@ -28,26 +39,39 @@ export default function QuestionsList({
               </div>
               
               <div className="space-y-2">
-                {question.options.map((option, optionIndex) => (
-                  <label key={optionIndex} className="flex items-start space-x-2 cursor-pointer">
-                    <input
-                      type={question.questionType === 'multiple_choice' ? 'radio' : 'checkbox'}
-                      name={`question-${index}`}
-                      value={option}
-                      checked={userAnswers[index] === option}
-                      onChange={() => onAnswerChange(index, option)}
-                      className="mt-1"
-                      disabled={isSubmitting}
-                    />
-                    <span>{option}</span>
-                  </label>
-                ))}
+                {/* Check if question has options (multiple choice, true/false, matching) */}
+                {question.options && question.options.length > 0 ? (
+                  question.options.map((option, optionIndex) => (
+                    <label key={optionIndex} className="flex items-start space-x-2 cursor-pointer">
+                      <input
+                        type={question.questionType === 'multiple_choice' ? 'radio' : 'checkbox'}
+                        name={`question-${index}`}
+                        value={option}
+                        checked={userAnswers[index] === option}
+                        onChange={() => onAnswerChange(index, option)}
+                        className="mt-1"
+                        disabled={isSubmitting}
+                      />
+                      <span>{option}</span>
+                    </label>
+                  ))
+                ) : (
+                  /* For short_answer questions, show text input */
+                  <input
+                    type="text"
+                    value={userAnswers[index] || ''}
+                    onChange={(e) => onAnswerChange(index, e.target.value)}
+                    placeholder="Enter your answer here..."
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    disabled={isSubmitting}
+                  />
+                )}
               </div>
             </div>
           ))}
         </div>
       </div>
-
+      
       <div className="mt-8 flex justify-center">
         <button
           onClick={onSubmit}

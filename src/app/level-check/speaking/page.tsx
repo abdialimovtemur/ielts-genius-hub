@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useSpeakingTestQuery } from "@/api/queries/speaking";
-import { SpeakingTest, SpeakingSubmission, SpeakingEvaluation, ApiError } from "@/types/speaking";
+import { SpeakingSubmission, SpeakingEvaluation, ApiError } from "@/types/speaking";
 import { useSubmitSpeakingTestMutation } from "@/api/mutations/speaking";
 import ErrorDisplay from "@/components/level-check/reading/ErrorDisplay";
 import LoadingSpinner from "@/components/level-check/reading/LoadingSpinner";

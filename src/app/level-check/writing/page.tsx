@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useWritingTask1Query, useWritingTask2Query } from "@/api/queries/writing";
 import { WritingTask1Evaluation, WritingTask2Evaluation } from "@/types/writing";
 import { useSubmitBothWritingTasksMutation } from "@/api/mutations/writing";
+import Image from "next/image";
 
 export default function LevelCheckWriting() {
   const [task1Answer, setTask1Answer] = useState("");
@@ -16,7 +17,7 @@ export default function LevelCheckWriting() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [task1Evaluation, setTask1Evaluation] = useState<WritingTask1Evaluation | null>(null);
   const [task2Evaluation, setTask2Evaluation] = useState<WritingTask2Evaluation | null>(null);
-  
+
   const { data: task1Question, refetch: getTask1Question, isFetching: isFetchingTask1 } = useWritingTask1Query();
   const { data: task2Question, refetch: getTask2Question, isFetching: isFetchingTask2 } = useWritingTask2Query();
   const { mutate: submitBothTasks, isPending: isSubmitting } = useSubmitBothWritingTasksMutation();
@@ -33,7 +34,7 @@ export default function LevelCheckWriting() {
       setTask1Seconds(prev => prev + 1);
       setTask1TimeSpent(Math.floor((task1Seconds + 1) / 60));
     }, 1000);
-    
+
     return () => clearInterval(timer);
   }, [task1Seconds]);
 
@@ -43,7 +44,7 @@ export default function LevelCheckWriting() {
       setTask2Seconds(prev => prev + 1);
       setTask2TimeSpent(Math.floor((task2Seconds + 1) / 60));
     }, 1000);
-    
+
     return () => clearInterval(timer);
   }, [task2Seconds]);
 
@@ -55,7 +56,7 @@ export default function LevelCheckWriting() {
 
   const handleSubmit = () => {
     if (!task1Question || !task2Question || !task1Answer.trim() || !task2Essay.trim()) return;
-    
+
     const task1Submission = {
       question: task1Question.question,
       imageUrl: task1Question.imageUrl,
@@ -63,13 +64,13 @@ export default function LevelCheckWriting() {
       answer: task1Answer,
       timeSpent: task1TimeSpent
     };
-    
+
     const task2Submission = {
       topic: task2Question.topic,
       essay: task2Essay,
       timeSpent: task2TimeSpent
     };
-    
+
     submitBothTasks({
       task1: task1Submission,
       task2: task2Submission
@@ -119,12 +120,12 @@ export default function LevelCheckWriting() {
                 <div className="text-4xl font-bold text-primary mb-2">{task1Evaluation.overallBand}</div>
                 <div className="text-sm font-medium">Task 1 Score</div>
               </div>
-              
+
               <div className="bg-primary/10 p-6 rounded-lg text-center">
                 <div className="text-4xl font-bold text-primary mb-2">{task2Evaluation.overallBand}</div>
                 <div className="text-sm font-medium">Task 2 Score</div>
               </div>
-              
+
               <div className="bg-primary p-6 rounded-lg text-center text-primary-foreground">
                 <div className="text-4xl font-bold mb-2">
                   {((parseFloat(task1Evaluation.overallBand) + parseFloat(task2Evaluation.overallBand)) / 2).toFixed(1)}
@@ -137,37 +138,37 @@ export default function LevelCheckWriting() {
               {/* Task 1 Results */}
               <div className="bg-muted p-4 rounded-lg">
                 <h3 className="text-xl font-semibold mb-3 text-primary">Task 1 Evaluation</h3>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Task Achievement:</h4>
                   <div className="text-lg font-bold text-primary">{task1Evaluation.taskAchievement}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Coherence & Cohesion:</h4>
                   <div className="text-lg font-bold text-primary">{task1Evaluation.coherenceCohesion}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Lexical Resource:</h4>
                   <div className="text-lg font-bold text-primary">{task1Evaluation.lexicalResource}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Grammatical Range:</h4>
                   <div className="text-lg font-bold text-primary">{task1Evaluation.grammaticalRange}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Word Count:</h4>
                   <div className="font-medium">{task1Evaluation.wordCount}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Feedback:</h4>
                   <p className="text-sm">{task1Evaluation.feedback}</p>
                 </div>
-                
+
                 <div>
                   <h4 className="font-medium mb-1">Suggestions:</h4>
                   <ul className="text-sm list-disc list-inside">
@@ -181,37 +182,37 @@ export default function LevelCheckWriting() {
               {/* Task 2 Results */}
               <div className="bg-muted p-4 rounded-lg">
                 <h3 className="text-xl font-semibold mb-3 text-primary">Task 2 Evaluation</h3>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Task Response:</h4>
                   <div className="text-lg font-bold text-primary">{task2Evaluation.taskResponse}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Coherence & Cohesion:</h4>
                   <div className="text-lg font-bold text-primary">{task2Evaluation.coherenceCohesion}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Lexical Resource:</h4>
                   <div className="text-lg font-bold text-primary">{task2Evaluation.lexicalResource}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Grammatical Range:</h4>
                   <div className="text-lg font-bold text-primary">{task2Evaluation.grammaticalRange}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Word Count:</h4>
                   <div className="font-medium">{task2Evaluation.wordCount}</div>
                 </div>
-                
+
                 <div className="mb-3">
                   <h4 className="font-medium mb-1">Feedback:</h4>
                   <p className="text-sm">{task2Evaluation.feedback}</p>
                 </div>
-                
+
                 <div>
                   <h4 className="font-medium mb-1">Suggestions:</h4>
                   <ul className="text-sm list-disc list-inside">
@@ -247,7 +248,7 @@ export default function LevelCheckWriting() {
 
         <div className="bg-card rounded-lg shadow-lg p-6 mb-6">
           <h2 className="text-2xl font-bold text-primary mb-6">Writing Task 1</h2>
-          
+
           <div className="flex justify-between items-center mb-4">
             <div className="text-sm text-muted-foreground">
               Time: <span className="font-medium">{formatTime(task1Seconds)}</span>
@@ -266,11 +267,15 @@ export default function LevelCheckWriting() {
 
               {task1Question.imageUrl && (
                 <div className="mb-6">
-                  <img 
-                    src={task1Question.imageUrl} 
-                    alt="Chart for writing task" 
-                    className="w-full max-w-md mx-auto border rounded-lg"
+                  <Image
+                    src={`https://dead.uz${task1Question.imageUrl}`}
+                    alt="Chart for writing task"
+                    width={600}   // haqiqiy rasm o‘lchamiga mos
+                    height={400}
+                    className="mx-auto border rounded-lg"
                   />
+
+
                   <p className="text-sm text-muted-foreground text-center mt-2">
                     {task1Question.dataDescription}
                   </p>
@@ -295,7 +300,7 @@ export default function LevelCheckWriting() {
 
         <div className="bg-card rounded-lg shadow-lg p-6 mb-6">
           <h2 className="text-2xl font-bold text-primary mb-6">Writing Task 2</h2>
-          
+
           <div className="flex justify-between items-center mb-4">
             <div className="text-sm text-muted-foreground">
               Time: <span className="font-medium">{formatTime(task2Seconds)}</span>
@@ -331,8 +336,8 @@ export default function LevelCheckWriting() {
         <div className="flex justify-center">
           <button
             onClick={handleSubmit}
-            disabled={isSubmitting || 
-              task1Answer.trim().split(/\s+/).length < 150 || 
+            disabled={isSubmitting ||
+              task1Answer.trim().split(/\s+/).length < 150 ||
               task2Essay.trim().split(/\s+/).length < 250}
             className="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-medium text-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
