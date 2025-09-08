@@ -1,6 +1,9 @@
 "use client"
 
 import { User } from "@/types/user"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Edit } from "lucide-react"
 
 interface ProfileDisplayProps {
   profile: User
@@ -57,6 +60,34 @@ export default function ProfileDisplay({
           <p className="text-lg text-gray-800 font-medium">
             {formatDate(profile.updatedAt)}
           </p>
+        </div>
+
+        {/* Interests Section */}
+        <div className="md:col-span-2 space-y-1">
+          <div className="flex items-center justify-between">
+            <label className="block text-sm font-medium text-gray-500">Interests</label>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/interests/edit">
+                <Edit className="h-4 w-4 mr-2" />
+                Edit Interests
+              </Link>
+            </Button>
+          </div>
+          
+          {profile.interests && profile.interests.length > 0 ? (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {profile.interests.map((interest) => (
+                <span
+                  key={interest._id}
+                  className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                >
+                  {interest.name}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 mt-2">No interests selected yet</p>
+          )}
         </div>
       </div>
     </div>

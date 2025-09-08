@@ -1,24 +1,25 @@
 // components/layout/Header.tsx
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { PanelLeft, PanelLeftClose } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
-import Cookies from "js-cookie"
 import { useProfileQuery } from "@/api/queries/profile"
+import { useAuth } from "@/contexts/AuthContext"
 
 const Header = () => {
   const { toggleSidebar, open } = useSidebar()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const { data: profile } = useProfileQuery()
+  const { isLoggedIn, checkAuth } = useAuth()
+  const { data: profile, isLoading } = useProfileQuery()
 
+  // Profile o'zgarganda auth holatini yangilash
   useEffect(() => {
-    // Tokenni tekshiramiz
-    const token = Cookies.get("token")
-    setIsLoggedIn(!!token)
-  }, [])
+    if (profile) {
+      checkAuth()
+    }
+  }, [profile, checkAuth])
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border h-16 w-full">

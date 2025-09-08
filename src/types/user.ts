@@ -1,3 +1,5 @@
+import { Interest } from "./interest";
+
 // src/types/user.ts
 export interface User {
   _id: string;
@@ -9,6 +11,7 @@ export interface User {
   subscriptionExpiry?: string;
   currentStreak?: number;
   createdAt: string;
+   interests?: Interest[]; 
   updatedAt: string;
   __v?: number;
 }

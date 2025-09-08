@@ -16,7 +16,7 @@ export const useUpdateUserMutation = () => {
     mutationFn: ({ id, user }: { id: number; user: UserFormData }) =>
       axiosInstance.put(`/users/${id}`, user),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] })
-  });
+  })
 };
 
 export const useDeleteUserMutation = () => {

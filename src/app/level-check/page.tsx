@@ -1,148 +1,81 @@
-"use client"
-
-import { useState, useEffect, useRef } from "react"
-import { toast } from "sonner"
-import TopicSection from "@/components/level-check/TopicSection"
-import EssayForm from "@/components/level-check/EssayForm"
-import EvaluationResults from "@/components/level-check/EvaluationResults"
-import Instructions from "@/components/level-check/Instructions"
-import { useWritingTopicQuery } from "@/api/queries/level-check"
-import { useEvaluateEssayMutation } from "@/api/mutations/level-check"
-import { EssayEvaluation } from "@/types/level-check"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BookOpen, Headphones, Mic, PenSquare } from "lucide-react";
 
 export default function LevelCheckPage() {
-  const [essay, setEssay] = useState("")
-  const [showEvaluation, setShowEvaluation] = useState(false)
-  const [evaluation, setEvaluation] = useState<EssayEvaluation | null>(null)
-  const [timeSpent, setTimeSpent] = useState(0)
-  const [isWritingStarted, setIsWritingStarted] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-
-  const { data: topicData, refetch: getTopic, isLoading: isTopicLoading, isError: isTopicError } = useWritingTopicQuery()
-  const { mutate: evaluateEssay, isPending: isEvaluationPending } = useEvaluateEssayMutation()
-
-  // Timer effect
-  useEffect(() => {
-    if (isWritingStarted && !showEvaluation) {
-      timerRef.current = setInterval(() => {
-        setTimeSpent(prev => prev + 1)
-      }, 1000)
-    } else if (timerRef.current) {
-      clearInterval(timerRef.current)
-    }
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current)
-      }
-    }
-  }, [isWritingStarted, showEvaluation])
-
-  const handleGetTopic = async () => {
-    try {
-      await getTopic()
-      setShowEvaluation(false)
-      setEvaluation(null)
-      setEssay("")
-      setTimeSpent(0)
-      setIsWritingStarted(false)
-      setIsSubmitted(false)
-    } catch (error) {
-      console.error("Error getting topic:", error)
-    }
-  }
-
-  const handleEssayChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (!isSubmitted) {
-      setEssay(e.target.value)
-
-      if (e.target.value.length > 0 && !isWritingStarted) {
-        setIsWritingStarted(true)
-      }
-    }
-  }
-
-  const handleSubmitEssay = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (isSubmitted) {
-      toast.error("Essay already submitted. Please get a new topic to try again.")
-      return
-    }
-
-    if (!topicData?.topic || !essay.trim()) {
-      toast.error("Please write your essay first")
-      return
-    }
-
-    if (essay.split(/\s+/).filter(word => word.length > 0).length < 50) {
-      toast.error("Essay should be at least 50 words")
-      return
-    }
-
-    setIsSubmitted(true)
-    setIsWritingStarted(false)
-
-    evaluateEssay(
-      {
-        topic: topicData.topic,
-        essay,
-        timeSpent
-      },
-      {
-        onSuccess: (response) => {
-          setEvaluation(response.data as EssayEvaluation)
-          setShowEvaluation(true)
-        },
-        onError: () => {
-          setIsSubmitted(false)
-          setIsWritingStarted(true)
-        }
-      }
-    )
-  }
+  const testSections = [
+    {
+      title: "Listening",
+      description: "Test your ability to understand spoken English in various contexts.",
+      icon: <Headphones className="h-10 w-10" />,
+      href: "/level-check/listening",
+      color: "bg-blue-100 text-blue-700",
+    },
+    {
+      title: "Reading",
+      description: "Evaluate your comprehension of written English texts and passages.",
+      icon: <BookOpen className="h-10 w-10" />,
+      href: "/level-check/reading",
+      color: "bg-green-100 text-green-700",
+    },
+    {
+      title: "Writing",
+      description: "Assess your ability to express ideas in well-structured written English.",
+      icon: <PenSquare className="h-10 w-10" />,
+      href: "/level-check/writing",
+      color: "bg-amber-100 text-amber-700",
+    },
+    {
+      title: "Speaking",
+      description: "Measure your fluency and coherence in spoken English communication.",
+      icon: <Mic className="h-10 w-10" />,
+      href: "/level-check/speaking",
+      color: "bg-rose-100 text-rose-700",
+    },
+  ];
 
   return (
-    <main className="p-6">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">IELTS Writing Level Check</h1>
-          <p className="text-gray-600">Test your writing skills and get professional evaluation</p>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-slate-800 mb-4">IELTS Practice Tests</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            Prepare for your IELTS exam with our comprehensive practice tests. Select a section below to begin improving your skills.
+          </p>
         </div>
 
-        <TopicSection
-          topicData={topicData ?? null}
-          isTopicLoading={isTopicLoading}
-          isTopicError={isTopicError}
-          timeSpent={timeSpent}
-          onGetTopic={handleGetTopic}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {testSections.map((section, index) => (
+            <Card key={index} className="overflow-hidden transition-all duration-300 hover:shadow-lg">
+              <CardHeader className={`pb-3 ${section.color} flex flex-row items-center justify-between`}>
+                <CardTitle className="text-2xl">{section.title}</CardTitle>
+                <div className={section.color.replace("bg-", "text-").replace("100", "700")}>
+                  {section.icon}
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <CardDescription className="text-lg mb-4 text-slate-700">
+                  {section.description}
+                </CardDescription>
+                <Button asChild className="w-full">
+                  <Link href={section.href}>Start {section.title} Test</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
-
-        {topicData?.topic && !showEvaluation && (
-          <EssayForm
-            essay={essay}
-            timeSpent={timeSpent}
-            isSubmitted={isSubmitted}
-            isEvaluationPending={isEvaluationPending}
-            onEssayChange={handleEssayChange}
-            onSubmit={handleSubmitEssay}
-          />
-        )}
-
-        {showEvaluation && evaluation && (
-          <EvaluationResults
-            evaluation={evaluation}
-            timeSpent={timeSpent}
-            onTryAgain={handleGetTopic}
-          />
-        )}
-
-        {!topicData?.topic && !showEvaluation && (
-          <Instructions />
-        )}
+        <div className="mt-12 bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-semibold text-slate-800 mb-4">About the IELTS Test</h2>
+          <p className="text-slate-600 mb-3">
+            The International English Language Testing System (IELTS) is designed to help you work, study or migrate to a country where English is the native language.
+          </p>
+          <p className="text-slate-600">
+            Each section of the test assesses different language skills. Regular practice with our tests will help you become familiar with the format and improve your scores.
+          </p>
+        </div>
       </div>
-    </main>
-  )
+    </div>
+  );
 }
